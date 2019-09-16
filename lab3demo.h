@@ -141,7 +141,7 @@ void Sentinel<T>::reversePrint() const{
 		std::cout << curr->data_ << " ";
 		curr=curr->prev_;
 	}
-	if(back->prev_==front_){
+	if(back_->prev_==front_){
 		std::cout << "empty list";
 	}
 	std::cout << std::endl;
