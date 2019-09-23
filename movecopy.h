@@ -15,6 +15,71 @@ class DList{
 	Node* front_;
 	Node* back_;
 public:
+	class const_iterator{
+	protected:
+		friend DList;
+		Node* curr_;   //points to node of interest
+		const_iterator(Node* n){
+			curr_=n;
+		}
+	public:
+		const_iterator(){
+			curr_=nullptr;
+		}
+		//++x
+		const_iterator operator++(){
+			curr_=curr_->next_;
+			return *this;
+		}
+		const_iterator operator++(int){
+			const_iterator old=*this;
+			curr_=curr_->next_;
+			return old;
+		}
+		const T& operator*() const{
+			return curr_->data_;
+		}
+		bool operator!=(const_iterator rhs) const{
+			return curr_ != rhs.curr_;
+		}
+	};
+	class iterator:public const_iterator{
+	protected:
+		friend DList;
+		iterator(Node* n):const_iterator(n){	}
+	public:
+		iterator():const_iterator(){	}
+		iterator operator++(){
+			this->curr_=this->curr_->next_;
+			return *this;
+		}
+		iterator operator++(int){
+			iterator old=*this;
+			this->curr_=this->curr_->next_;
+			return old;
+		}
+		T& operator*(){
+			return this->curr_->data_;
+		}
+
+	};
+	const_iterator cbegin() const{
+		return const_iterator(front_);
+	}
+	//this function returns an iterator to the "node" after the
+	//last node
+	const_iterator cend() const{
+		return const_iterator(nullptr);
+	}
+	iterator begin(){
+		return iterator(front_);
+	}
+	//this function returns an iterator to the "node" after the
+	//last node
+	iterator end(){
+		return iterator(nullptr);
+	}
+
 	DList(){
 		front_=nullptr;
 		back_=nullptr;
@@ -25,6 +90,14 @@ public:
 	void pop_back();
 	void print() const;
 	void reversePrint() const;
+
+ 	//O(n) where n is number of nodes in DList
+	DList(const DList& other);
+	const DList& operator=(const DList& other);
+
+ 	//O(1) where n is number of nodes in DList
+	DList(DList&& other);
+	const DList& operator=(DList&& other);
 	~DList();
 };
 
