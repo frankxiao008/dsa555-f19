@@ -6,6 +6,7 @@
 /*                                                                        */
 /*   V1.1: fixed bug with update() check                                  */
 /*                                                                        */
+/*   V1.2: fixed memory leak/file close                                   */
 /**************************************************************************/
 
 #include "table.h"
@@ -58,6 +59,10 @@ int main(void){
 	else{
 		std::cout << "Looks like you still have some work left to do" << std::endl;
 	}
+	delete [] data;
+	delete [] keys;
+
+	return 0;
 }
 /* test1: Initialization, numRecords(),  isEmpty()
 */
@@ -1038,5 +1043,6 @@ void createData(std::string keys[],int data[],int max){
 			j=0;
 		}
 	}
+	fclose(fp);
 }
 
