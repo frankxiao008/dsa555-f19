@@ -6,6 +6,8 @@
 /*                                                                        */
 /*   V1.1: fixed bug with update() check                                  */
 /*                                                                        */
+/*   V1.2: fixed memory leak/file close                                   */
+/*   V1.3: std namespace default                                          */
 /**************************************************************************/
 
 #include "table.h"
@@ -29,7 +31,7 @@ const int numTests=11;
 const int maxRecords=2000000;
 
 typedef bool (*TestPtr)(std::string [], int [], int , std::string& );
-void createData(string keys[],int data[],int max);
+void createData(std::string keys[],int data[],int max);
 int main(void){
 	TestPtr runTest[numTests]={test1, test2, test3, test4, test5, 
 		                       test6, test7, test8, test9, test10,
@@ -58,6 +60,10 @@ int main(void){
 	else{
 		std::cout << "Looks like you still have some work left to do" << std::endl;
 	}
+	delete [] data;
+	delete [] keys;
+
+	return 0;
 }
 /* test1: Initialization, numRecords(),  isEmpty()
 */
@@ -196,9 +202,9 @@ bool test3(std::string keys[], int data[], int max, std::string& error){
 				error="Error 3b: value associated with key: ";
 				error+=keys[i];
 				error+= " should be: ";
-				error+=to_string(data[i]);
+				error+=std::to_string(data[i]);
 				error+="\nyour find passed back: ";
-				error+=to_string(value);
+				error+=std::to_string(value);
 			}
 		}
 		i++;
@@ -217,9 +223,9 @@ bool test3(std::string keys[], int data[], int max, std::string& error){
 				error="Error 3d: value associated with key: ";
 				error+=keys[i];
 				error+= " should be: ";
-				error+=to_string(data[i]);
+				error+=std::to_string(data[i]);
 				error+="\nyour find passed back: ";
-				error+=to_string(value);
+				error+=std::to_string(value);
 			}
 		}
 		i++;
@@ -238,9 +244,9 @@ bool test3(std::string keys[], int data[], int max, std::string& error){
 				error="Error 3f: value associated with key: ";
 				error+=keys[i];
 				error+= " should be: ";
-				error+=to_string(data[i]);
+				error+=std::to_string(data[i]);
 				error+="\nyour find passed back: ";
-				error+=to_string(value);
+				error+=std::to_string(value);
 			}
 		}
 		i++;
@@ -403,9 +409,9 @@ bool test5(std::string keys[], int data[], int max, std::string& error){
 				error="Error 5b: value associated with key: ";
 				error+=keys[i];
 				error+= " should be: ";
-				error+=to_string(correct);
+				error+=std::to_string(correct);
 				error+="\nyour find passed back: ";
-				error+=to_string(value);
+				error+=std::to_string(value);
 			}
 		}
 		i++;
@@ -426,9 +432,9 @@ bool test5(std::string keys[], int data[], int max, std::string& error){
 				error="Error 5d: value associated with key: ";
 				error+=keys[i];
 				error+= " should be: ";
-				error+=to_string(correct);
+				error+=std::to_string(correct);
 				error+="\nyour find passed back: ";
-				error+=to_string(value);
+				error+=std::to_string(value);
 			}
 		}
 		i++;
@@ -448,9 +454,9 @@ bool test5(std::string keys[], int data[], int max, std::string& error){
 				error="Error 5f: value associated with key: ";
 				error+=keys[i];
 				error+= " should be: ";
-				error+=to_string(correct);
+				error+=std::to_string(correct);
 				error+="\nyour find passed back: ";
-				error+=to_string(value);
+				error+=std::to_string(value);
 			}
 		}
 		i++;
@@ -536,9 +542,9 @@ bool test6(std::string keys[], int data[], int max, std::string& error){
 				error="Error 6h: value associated with key: ";
 				error+=keys[i];
 				error+= " should be: ";
-				error+=to_string(data[i]);
+				error+=std::to_string(data[i]);
 				error+="\nyour find passed back: ";
-				error+=to_string(value);
+				error+=std::to_string(value);
 			}
 		}
 		i++;
@@ -557,9 +563,9 @@ bool test6(std::string keys[], int data[], int max, std::string& error){
 				error="Error 6j: value associated with key: ";
 				error+=keys[i];
 				error+= " should be: ";
-				error+=to_string(data[i]);
+				error+=std::to_string(data[i]);
 				error+="\nyour find passed back: ";
-				error+=to_string(value);
+				error+=std::to_string(value);
 			}
 		}
 		i++;
@@ -578,9 +584,9 @@ bool test6(std::string keys[], int data[], int max, std::string& error){
 				error="Error 6l: value associated with key: ";
 				error+=keys[i];
 				error+= " should be: ";
-				error+=to_string(data[i]);
+				error+=std::to_string(data[i]);
 				error+="\nyour find passed back: ";
-				error+=to_string(value);
+				error+=std::to_string(value);
 			}
 		}
 		i++;
@@ -671,24 +677,24 @@ bool test8(std::string keys[], int data[], int max, std::string& error){
 
 	if(isGood && table1copy.numRecords() != table1.numRecords()){
 		error="Error 8a: number of records was not correct.\n Correct number of records: ";
-		error+=to_string(table1.numRecords());
+		error+=std::to_string(table1.numRecords());
 		error+="\nYour function returns: ";
-		error+=to_string(table1copy.numRecords());
+		error+=std::to_string(table1copy.numRecords());
 		isGood=false;
 	}
 	if(isGood && table2copy.numRecords() != table2.numRecords()){
 		error="Error 8b: number of records was not correct.\n Correct number of records: ";
-		error+=to_string(table2.numRecords());
+		error+=std::to_string(table2.numRecords());
 		error+="\nYour function returns: ";
-		error+=to_string(table2copy.numRecords());
+		error+=std::to_string(table2copy.numRecords());
 		isGood=false;
 
 	}
 	if(isGood && table3copy.numRecords() != table3.numRecords() ){
 		error="Error 8c: number of records was not correct.\n Correct number of records: ";
-		error+=to_string(table3.numRecords());
+		error+=std::to_string(table3.numRecords());
 		error+="\nYour function returns: ";
-		error+=to_string(table3copy.numRecords());
+		error+=std::to_string(table3copy.numRecords());
 		isGood=false;
 	}
 
@@ -725,9 +731,9 @@ bool test8(std::string keys[], int data[], int max, std::string& error){
 				error="Error 8e: value associated with key: ";
 				error+=keys[i];
 				error+= " should be: ";
-				error+=to_string(data[i]);
+				error+=std::to_string(data[i]);
 				error+="\nyour find passed back: ";
-				error+=to_string(value);
+				error+=std::to_string(value);
 				error+="\nperhaps a deep copy was not made";
 
 			}
@@ -748,9 +754,9 @@ bool test8(std::string keys[], int data[], int max, std::string& error){
 				error="Error 8g: value associated with key: ";
 				error+=keys[i];
 				error+= " should be: ";
-				error+=to_string(data[i]);
+				error+=std::to_string(data[i]);
 				error+="\nyour find passed back: ";
-				error+=to_string(value);
+				error+=std::to_string(value);
 				error+="\nperhaps a deep copy was not made";
 
 			}
@@ -771,9 +777,9 @@ bool test8(std::string keys[], int data[], int max, std::string& error){
 				error="Error 8i: value associated with key: ";
 				error+=keys[i];
 				error+= " should be: ";
-				error+=to_string(data[i]);
+				error+=std::to_string(data[i]);
 				error+="\nyour find passed back: ";
-				error+=to_string(value);
+				error+=std::to_string(value);
 				error+="\nperhaps a deep copy was not made";
 			}
 		}
@@ -838,9 +844,9 @@ bool test9(std::string keys[], int data[], int max, std::string& error){
 				error="Error 9b: value associated with key: ";
 				error+=keys[i];
 				error+= " should be: ";
-				error+=to_string(data[i]);
+				error+=std::to_string(data[i]);
 				error+="\nyour find() passed back: ";
-				error+=to_string(value);
+				error+=std::to_string(value);
 				error+="\nperhaps a deep copy was not made";
 
 			}
@@ -873,9 +879,9 @@ bool test9(std::string keys[], int data[], int max, std::string& error){
 				error="Error 9d: value associated with key: ";
 				error+=keys[i];
 				error+= " should be: ";
-				error+=to_string(data[i]);
+				error+=std::to_string(data[i]);
 				error+="\nyour find() passed back: ";
-				error+=to_string(value);
+				error+=std::to_string(value);
 				error+="\nperhaps a deep copy was not made";
 
 			}
@@ -917,9 +923,9 @@ bool test10(std::string keys[], int data[], int max, std::string& error){
 				error="Error 10b: value associated with key: ";
 				error+=keys[i];
 				error+= " should be: ";
-				error+=to_string(data[i]);
+				error+=std::to_string(data[i]);
 				error+="\nyour find passed back: ";
-				error+=to_string(value);
+				error+=std::to_string(value);
 				error+="\nperhaps a deep copy was not made";
 			}
 		}
@@ -974,9 +980,9 @@ bool test11(std::string keys[], int data[], int max, std::string& error){
 				error="Error 11b: value associated with key: ";
 				error+=keys[i];
 				error+= " should be: ";
-				error+=to_string(data[i]);
+				error+=std::to_string(data[i]);
 				error+="\nyour find() passed back: ";
-				error+=to_string(value);
+				error+=std::to_string(value);
 				error+="\nperhaps a deep copy was not made";
 
 			}
@@ -1001,9 +1007,9 @@ bool test11(std::string keys[], int data[], int max, std::string& error){
 				error="Error 11d: value associated with key: ";
 				error+=keys[i];
 				error+= " should be: ";
-				error+=to_string(data[i]);
+				error+=std::to_string(data[i]);
 				error+="\nyour find() passed back: ";
-				error+=to_string(value);
+				error+=std::to_string(value);
 				error+="\nperhaps a deep copy was not made";
 
 			}
@@ -1038,5 +1044,6 @@ void createData(std::string keys[],int data[],int max){
 			j=0;
 		}
 	}
+	fclose(fp);
 }
 
